@@ -20,7 +20,6 @@ public class TbCourse implements Serializable {
 
     private String teacherId;
 
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date addDate;
 
     private static final long serialVersionUID = 1L;

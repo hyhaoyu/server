@@ -36,7 +36,7 @@ public interface CourseService {
      * @param token
      * @return 返回课程列表
      */
-    CourseList queryCourse(String name, Integer pageNum, Integer pageSize, String token);
+    CourseList queryCourse(String name, String teacherId, Integer pageNum, Integer pageSize, String token);
 
     /**
      * 上传课程图片

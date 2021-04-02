@@ -87,11 +87,12 @@ public class CourseController {
     //查询课程
     @RequestMapping(value = "", method = RequestMethod.GET)
     public Result queryCourse(@RequestParam(value = "name",required = false)String name,
+                              @RequestParam(value = "teacherId",required = false)String teacherId,
                               @RequestParam(value = "pageNum",required = false)Integer pageNum,
                               @RequestParam(value = "pageSize",required = false)Integer pageSize,
                               @RequestHeader(value = "authorization",required = false)String token) {
         try {
-            CourseList courseList = courseService.queryCourse(name, pageNum, pageSize, token);
+            CourseList courseList = courseService.queryCourse(name, teacherId, pageNum, pageSize, token);
             if(courseList == null){
                 return new Result(false,"课程查询为空");
             }

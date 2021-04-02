@@ -1,9 +1,9 @@
 package com.haoyu.service.impl;
 
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.haoyu.mapper.TbAdminMapper;
+import com.haoyu.mapper.TbCourseMapper;
+import com.haoyu.mapper.TbStudentCourseMapper;
 import com.haoyu.mapper.TbTeacherMapper;
-import com.haoyu.pojo.TbStudent;
 import com.haoyu.pojo.TbTeacher;
 import com.haoyu.pojo.TbTeacherExample;
 import com.haoyu.pojo.vo.Image;

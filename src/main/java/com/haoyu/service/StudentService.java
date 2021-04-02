@@ -34,12 +34,13 @@ public interface StudentService {
     /**
      * 查看用户信息
      * @param name
+     * @param courseId
      * @param pageNum
      * @param pageSize
      * @param token
      * @return
      */
-    StudentList queryStudent(String name, Integer pageNum, Integer pageSize, String token);
+    StudentList queryStudent(String name, String courseId, Integer pageNum, Integer pageSize, String token);
 
     /**
      * 删除用户

@@ -158,7 +158,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public StudentList queryStudent(String name, Integer pageNum, Integer pageSize, String token) {
+    public StudentList queryStudent(String name, String courseId, Integer pageNum, Integer pageSize, String token) {
 
         //验证权限
         if(adminMapper.selectByPrimaryKey(TokenWorker.getIdFromJWT(token)) ==null){
@@ -166,6 +166,7 @@ public class StudentServiceImpl implements StudentService {
         }
 
         TbStudentExample example = new TbStudentExample();
+        example.setDistinct(true);
         TbStudentExample.Criteria criteria1 = example.createCriteria();
         TbStudentExample.Criteria criteria2 = example.createCriteria();
 
@@ -174,6 +175,10 @@ public class StudentServiceImpl implements StudentService {
             criteria1.andRealNameLike("%"+name+"%");
             criteria2.andUsernameLike("%"+name+"%");
             example.or(criteria2);
+        }
+        if(StringUtils.isNotBlank(courseId)){
+            criteria1.andCourseIdEqualTo(courseId);
+            criteria2.andCourseIdEqualTo(courseId);
         }
 
         if(pageNum != null && pageSize != null){

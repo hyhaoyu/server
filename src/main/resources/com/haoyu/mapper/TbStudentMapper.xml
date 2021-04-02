@@ -71,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, username, password, real_name, gender, age, phone, avatar_url, registration_date
+    tb_student.id, username, password, real_name, gender, age, phone, avatar_url, registration_date
   </sql>
   <select id="selectByExample" parameterType="com.haoyu.pojo.TbStudentExample" resultMap="BaseResultMap">
     select
@@ -80,6 +80,7 @@
     </if>
     <include refid="Base_Column_List" />
     from tb_student
+    LEFT JOIN tb_student_course ON tb_student.id = tb_student_course.user_id
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -178,7 +179,8 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.haoyu.pojo.TbStudentExample" resultType="java.lang.Long">
-    select count(*) from tb_student
+    select count(DISTINCT(tb_student.id)) from tb_student
+    LEFT JOIN tb_student_course ON tb_student.id = tb_student_course.user_id
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>

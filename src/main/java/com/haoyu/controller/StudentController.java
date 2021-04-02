@@ -88,11 +88,12 @@ public class StudentController {
     //查询学生信息
     @RequestMapping(value = "", method = RequestMethod.GET)
     public Result queryStudent(@RequestParam(value = "name",required = false)String name,
-                            @RequestParam(value = "pageNum",required = false)Integer pageNum,
-                            @RequestParam(value = "pageSize",required = false)Integer pageSize,
-                            @RequestHeader(value = "authorization",required = false)String token) {
+                               @RequestParam(value = "courseId",required = false)String courseId,
+                               @RequestParam(value = "pageNum",required = false)Integer pageNum,
+                               @RequestParam(value = "pageSize",required = false)Integer pageSize,
+                               @RequestHeader(value = "authorization",required = false)String token) {
         try {
-            StudentList studentList = studentService.queryStudent(name, pageNum, pageSize, token);
+            StudentList studentList = studentService.queryStudent(name, courseId, pageNum, pageSize, token);
             if(studentList == null){
                 return new Result(false,"用户查询为空");
             }

@@ -121,7 +121,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public CourseList queryCourse(String name, Integer pageNum, Integer pageSize, String token) {
+    public CourseList queryCourse(String name, String teacherId, Integer pageNum, Integer pageSize, String token) {
         //验证权限
         if(adminMapper.selectByPrimaryKey(TokenWorker.getIdFromJWT(token)) ==null){
             throw new RuntimeException("无查询权限，请以管理员身份登录");
@@ -133,6 +133,9 @@ public class CourseServiceImpl implements CourseService {
         //查询条件
         if(StringUtils.isNotBlank(name)){
             criteria.andCourseNameLike("%"+name+"%");
+        }
+        if(StringUtils.isNotBlank(teacherId)){
+            criteria.andTeacherIdEqualTo(teacherId);
         }
 
         if(pageNum != null && pageSize != null){

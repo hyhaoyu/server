@@ -57,7 +57,7 @@ public class StudentCourseServiceImpl implements StudentCourseService {
             example.setPageSize(null);
         }
 
-        //根据用户名查询数据
+        //根据用户id查询数据
         List<TbStudentCourse> tbStudentCourseList= studentCourseMapper.selectByExample(example);
         long total = studentCourseMapper.countByExample(example);
         List<StudentCourse> studentCourseList = new ArrayList<>();
@@ -68,7 +68,10 @@ public class StudentCourseServiceImpl implements StudentCourseService {
             for(TbStudentCourse tbStudentCourse : tbStudentCourseList){
 
                 TbCourse course = queryCourseById(tbStudentCourse.getCourseId());
-                String teacherName = queryTeacherNameById(course.getTeacherId());
+                String teacherName ="";
+                if(course.getTeacherId() != null){
+                    teacherName = queryTeacherNameById(course.getTeacherId());
+                }
                 StudentCourse studentCourse = new StudentCourse();
                 studentCourse.setStudentCourse(course, tbStudentCourse, teacherName);
                 studentCourseList.add(studentCourse);
