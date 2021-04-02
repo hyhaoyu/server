@@ -8,14 +8,11 @@ import com.haoyu.pojo.*;
 import com.haoyu.pojo.vo.CourseGrade;
 import com.haoyu.pojo.vo.StudentCourse;
 import com.haoyu.pojo.vo.StudentCourseList;
-import com.haoyu.pojo.vo.StudentList;
 import com.haoyu.service.StudentCourseService;
 import com.haoyu.util.IdWorker;
 import com.haoyu.util.TokenWorker;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.DigestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,14 +58,14 @@ public class StudentCourseServiceImpl implements StudentCourseService {
         }
 
         //根据用户名查询数据
-        List<TbStudentCourse> TbStudentCourseList= studentCourseMapper.selectByExample(example);
+        List<TbStudentCourse> tbStudentCourseList= studentCourseMapper.selectByExample(example);
         long total = studentCourseMapper.countByExample(example);
         List<StudentCourse> studentCourseList = new ArrayList<>();
 
         //判断数据是否存在
-        if(TbStudentCourseList != null && TbStudentCourseList.size() != 0){
+        if(tbStudentCourseList != null && tbStudentCourseList.size() != 0){
 
-            for(TbStudentCourse tbStudentCourse : TbStudentCourseList){
+            for(TbStudentCourse tbStudentCourse : tbStudentCourseList){
 
                 TbCourse course = queryCourseById(tbStudentCourse.getCourseId());
                 String teacherName = queryTeacherNameById(course.getTeacherId());

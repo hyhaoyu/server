@@ -5,6 +5,26 @@ import java.util.Date;
 import java.util.List;
 
 public class TbCourseExample {
+    protected Integer startCount;
+
+    protected Integer pageSize;
+
+    public Integer getStartCount() {
+        return startCount;
+    }
+
+    public void setStartCount(Integer startCount) {
+        this.startCount = startCount;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
+
     protected String orderByClause;
 
     protected boolean distinct;

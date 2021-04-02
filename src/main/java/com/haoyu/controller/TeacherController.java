@@ -1,6 +1,7 @@
 package com.haoyu.controller;
 
 import com.haoyu.pojo.TbTeacher;
+import com.haoyu.pojo.vo.Image;
 import com.haoyu.pojo.vo.Result;
 import com.haoyu.pojo.vo.Teacher;
 import com.haoyu.pojo.vo.TeacherList;
@@ -8,6 +9,7 @@ import com.haoyu.service.TeacherService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping(value = "/teacher")
@@ -19,7 +21,7 @@ public class TeacherController {
 
     //登录
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Result login(TbTeacher teacher){
+    public Result login(@RequestBody TbTeacher teacher){
 
         try {
             Teacher _teacher = teacherService.login(teacher.getUsername(),teacher.getPassword());
@@ -38,7 +40,7 @@ public class TeacherController {
 
     //注册
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public Result register(TbTeacher teacher){
+    public Result register(@RequestBody TbTeacher teacher){
 
         try {
             teacherService.register(teacher);
@@ -52,7 +54,7 @@ public class TeacherController {
 
     //修改
     @RequestMapping(value = "", method = RequestMethod.PUT)
-    public Result updateTeacher(TbTeacher teacher,
+    public Result updateTeacher(@RequestBody TbTeacher teacher,
                                 @RequestHeader(value = "authorization",required = false)String token) {
         try {
             teacherService.updateTeacher(teacher, token);
@@ -64,6 +66,23 @@ public class TeacherController {
         catch (Exception e) {
             e.printStackTrace();
             return new Result(false,"更新失败");
+        }
+    }
+    //上传头像
+    @RequestMapping(value = "avatar", method = RequestMethod.POST)
+    public Result updateStudentAvatar(@RequestParam("id")String teacherId,
+                                      @RequestParam("file") MultipartFile imgFile,
+                                      @RequestHeader(value = "authorization",required = false)String token){
+        try {
+            Image image = teacherService.updateTeacherAvatar(teacherId, imgFile, token);
+            return new Result(true,"头像上传成功", image);
+        }
+        catch (RuntimeException e){
+            return new Result(false,e.getMessage());
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"头像上传失败");
         }
     }
 

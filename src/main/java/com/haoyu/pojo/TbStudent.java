@@ -23,7 +23,6 @@ public class TbStudent implements Serializable {
 
     private String avatarUrl;
 
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date registrationDate;
 
     private static final long serialVersionUID = 1L;

@@ -17,7 +17,6 @@ public class Student {
     private Integer age;
     private String phone;
     private String avatarUrl;
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date registrationDate;
     private String token;
 

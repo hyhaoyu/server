@@ -4,10 +4,12 @@ import com.haoyu.mapper.TbAdminMapper;
 import com.haoyu.mapper.TbStudentMapper;
 import com.haoyu.pojo.TbStudent;
 import com.haoyu.pojo.TbStudentExample;
+import com.haoyu.pojo.vo.Image;
 import com.haoyu.pojo.vo.Student;
 import com.haoyu.pojo.vo.StudentList;
 import com.haoyu.service.StudentService;
 import com.haoyu.util.IdWorker;
+import com.haoyu.util.ImgFileWorker;
 import com.haoyu.util.TokenWorker;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -15,7 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -97,7 +101,34 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void updateStudent(TbStudent student, String token) {
+    public Image updateStudentAvatar(String studentId, MultipartFile imgFile, String token) throws IOException {
+
+        //获取token中的id
+        String id = TokenWorker.getIdFromJWT(token);
+
+        //验证权限
+        if(!id.equals(studentId) && adminMapper.selectByPrimaryKey(id) ==null){
+            throw new RuntimeException("无更新权限，请以管理员或者用户本人身份登录");
+        }
+        TbStudent tbStudent = studentMapper.selectByPrimaryKey(studentId);
+        if(tbStudent == null){
+            throw new RuntimeException("用户更新错误");
+        }
+
+        //保存图片
+        if(imgFile != null) {
+            String picUrl = "/images/" + ImgFileWorker.saveImg(imgFile, "student", studentId);
+            tbStudent.setAvatarUrl(picUrl);
+            studentMapper.updateByPrimaryKey(tbStudent);
+            return new Image(studentId, picUrl);
+        }
+        else{
+            return null;
+        }
+    }
+
+    @Override
+    public void updateStudent(TbStudent student,  String token){
 
         //获取token中的id
         String id = TokenWorker.getIdFromJWT(token);
@@ -156,14 +187,14 @@ public class StudentServiceImpl implements StudentService {
         }
 
         //根据用户名查询数据
-        List<TbStudent> TbStudentList = studentMapper.selectByExample(example);
+        List<TbStudent> tbStudentList = studentMapper.selectByExample(example);
         long total = studentMapper.countByExample(example);
         List<Student> studentList = new ArrayList<>();
 
         //判断数据是否存在
-        if(TbStudentList != null && TbStudentList.size() != 0){
+        if(tbStudentList != null && tbStudentList.size() != 0){
 
-            for(TbStudent tbStudent : TbStudentList){
+            for(TbStudent tbStudent : tbStudentList){
                 Student _student = new Student();
                 BeanUtils.copyProperties(tbStudent, _student);
                 studentList.add(_student);

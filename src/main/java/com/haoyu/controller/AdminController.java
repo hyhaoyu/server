@@ -17,7 +17,7 @@ public class AdminController {
 
     //登录
     @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public Result login(TbAdmin admin){
+    public Result login(@RequestBody TbAdmin admin){
         try {
             Admin _admin=adminService.login(admin.getUsername(),admin.getPassword());
 
@@ -35,7 +35,7 @@ public class AdminController {
 
     //注册
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public Result register(TbAdmin admin){
+    public Result register(@RequestBody TbAdmin admin){
 
         try {
             adminService.register(admin);

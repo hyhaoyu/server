@@ -3,12 +3,15 @@ package com.haoyu.service.impl;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.haoyu.mapper.TbAdminMapper;
 import com.haoyu.mapper.TbTeacherMapper;
+import com.haoyu.pojo.TbStudent;
 import com.haoyu.pojo.TbTeacher;
 import com.haoyu.pojo.TbTeacherExample;
+import com.haoyu.pojo.vo.Image;
 import com.haoyu.pojo.vo.Teacher;
 import com.haoyu.pojo.vo.TeacherList;
 import com.haoyu.service.TeacherService;
 import com.haoyu.util.IdWorker;
+import com.haoyu.util.ImgFileWorker;
 import com.haoyu.util.TokenWorker;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -16,7 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -93,6 +98,32 @@ public class TeacherServiceImpl implements TeacherService {
         }
         if(StringUtils.isBlank(teacherId) || teacherMapper.deleteByPrimaryKey(teacherId) == 0) {
             throw new RuntimeException("用户不存在");
+        }
+    }
+
+    @Override
+    public Image updateTeacherAvatar(String teacherId, MultipartFile imgFile, String token) throws IOException {
+        //获取token中的id
+        String id = TokenWorker.getIdFromJWT(token);
+
+        //验证权限
+        if(!id.equals(teacherId) && adminMapper.selectByPrimaryKey(id) ==null){
+            throw new RuntimeException("无更新权限，请以管理员或者用户本人身份登录");
+        }
+        TbTeacher tbTeacher = teacherMapper.selectByPrimaryKey(teacherId);
+        if(tbTeacher == null){
+            throw new RuntimeException("用户更新错误");
+        }
+
+        //保存图片
+        if(imgFile != null) {
+            String picUrl = "/images/" + ImgFileWorker.saveImg(imgFile, "teacher", teacherId);
+            tbTeacher.setAvatarUrl(picUrl);
+            teacherMapper.updateByPrimaryKey(tbTeacher);
+            return new Image(teacherId, picUrl);
+        }
+        else{
+            return null;
         }
     }
 

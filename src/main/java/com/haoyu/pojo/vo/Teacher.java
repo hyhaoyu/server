@@ -15,7 +15,6 @@ public class Teacher {
     private Integer age;
     private String avatarUrl;
     private String introduction;
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date registrationDate;
 
     public String getId() {

@@ -1,8 +1,12 @@
 package com.haoyu.service;
 
 import com.haoyu.pojo.TbStudent;
+import com.haoyu.pojo.vo.Image;
 import com.haoyu.pojo.vo.Student;
 import com.haoyu.pojo.vo.StudentList;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 public interface StudentService {
 
@@ -43,4 +47,12 @@ public interface StudentService {
      * @param token
      */
     void deleteStudentByStudentId(String studentId, String token);
+
+    /**
+     * 上传用户头像
+     * @param studentId
+     * @param imgFile
+     * @param token
+     */
+    Image updateStudentAvatar(String studentId, MultipartFile imgFile, String token) throws IOException;
 }

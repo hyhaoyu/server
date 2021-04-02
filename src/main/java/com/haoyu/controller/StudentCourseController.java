@@ -41,7 +41,7 @@ public class StudentCourseController {
 
     //修改
     @RequestMapping(value = "", method = RequestMethod.PUT)
-    public Result updateCourseGrade(CourseGrade courseGrade,
+    public Result updateCourseGrade(@RequestBody CourseGrade courseGrade,
                                     @RequestHeader(value = "authorization",required = false)String token) {
 
         try {
