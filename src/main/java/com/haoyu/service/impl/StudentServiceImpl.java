@@ -58,12 +58,12 @@ public class StudentServiceImpl implements StudentService {
         List<TbStudent> studentList = studentMapper.selectByExample(example);
         //判断数据是否存在
         if(studentList != null && studentList.size() == 1){
-            //将用户密码加密密
+            //将用户密码加密
             String encodingPassword = DigestUtils.md5DigestAsHex(password.getBytes());
             if(encodingPassword.equals(studentList.get(0).getPassword())){
                 Student _student = new Student();
                 BeanUtils.copyProperties(studentList.get(0), _student);
-                _student.setToken(TokenWorker.generateToken(_student.getId(),password));
+                _student.setToken(TokenWorker.generateToken(_student.getId(), password, 2));
                 return _student;
             }
         }
@@ -192,8 +192,8 @@ public class StudentServiceImpl implements StudentService {
         }
 
         //根据用户名查询数据
-        List<TbStudent> tbStudentList = studentMapper.selectByExample(example);
-        long total = studentMapper.countByExample(example);
+        List<TbStudent> tbStudentList = studentMapper.selectByMyExample(example);
+        long total = studentMapper.countByMyExample(example);
         List<Student> studentList = new ArrayList<>();
 
         //判断数据是否存在

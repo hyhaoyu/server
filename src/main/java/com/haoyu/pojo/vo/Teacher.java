@@ -16,6 +16,7 @@ public class Teacher {
     private String avatarUrl;
     private String introduction;
     private Date registrationDate;
+    private String token;
 
     public String getId() {
         return id;
@@ -89,4 +90,11 @@ public class Teacher {
         this.registrationDate = registrationDate;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 }

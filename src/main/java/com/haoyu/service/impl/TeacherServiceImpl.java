@@ -67,6 +67,7 @@ public class TeacherServiceImpl implements TeacherService {
             if(encodingPassword.equals(teacherList.get(0).getPassword())){
                 Teacher _teacher = new Teacher();
                 BeanUtils.copyProperties(teacherList.get(0),_teacher);
+                _teacher.setToken(TokenWorker.generateToken(_teacher.getId(), password, 1));
                 return _teacher;
             }
         }

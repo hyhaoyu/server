@@ -18,6 +18,10 @@ public interface TbStudentMapper {
 
     List<TbStudent> selectByExample(TbStudentExample example);
 
+    //自定义sql映射
+    long countByMyExample(TbStudentExample example);
+    List<TbStudent> selectByMyExample(TbStudentExample example);
+
     TbStudent selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") TbStudent record, @Param("example") TbStudentExample example);

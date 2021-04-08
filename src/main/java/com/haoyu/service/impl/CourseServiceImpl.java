@@ -122,10 +122,8 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseList queryCourse(String name, String teacherId, Integer pageNum, Integer pageSize, String token) {
-        //验证权限
-        if(adminMapper.selectByPrimaryKey(TokenWorker.getIdFromJWT(token)) ==null){
-            throw new RuntimeException("无查询权限，请以管理员身份登录");
-        }
+        //解密token
+        TokenWorker.verifyToken(token);
 
         TbCourseExample example = new TbCourseExample();
         TbCourseExample.Criteria criteria = example.createCriteria();
@@ -139,6 +137,10 @@ public class CourseServiceImpl implements CourseService {
         }
 
         if(pageNum != null && pageSize != null){
+            if(pageNum <= 0 || pageSize <= 0){
+                pageNum = 1;
+                pageSize = 10;
+            }
             example.setStartCount((pageNum-1)*pageSize);
             example.setPageSize(pageSize);
         }

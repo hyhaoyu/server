@@ -3,6 +3,8 @@ package com.haoyu.pojo.vo;
 import com.haoyu.pojo.TbCourse;
 import com.haoyu.pojo.TbStudentCourse;
 
+import java.util.Date;
+
 public class StudentCourse {
 
     private String id;
@@ -13,6 +15,8 @@ public class StudentCourse {
 
     private Integer headcount;
 
+    private String picUrl;
+
     private Integer duration;
 
     private Integer grade;
@@ -20,6 +24,8 @@ public class StudentCourse {
     private String introduction;
 
     private String teacherName;
+
+    private Date addDate;
 
     public String getId() {
         return id;
@@ -51,6 +57,14 @@ public class StudentCourse {
 
     public void setHeadcount(Integer headcount) {
         this.headcount = headcount;
+    }
+
+    public String getPicUrl() {
+        return picUrl;
+    }
+
+    public void setPicUrl(String picUrl) {
+        this.picUrl = picUrl;
     }
 
     public Integer getDuration() {
@@ -85,14 +99,24 @@ public class StudentCourse {
         this.teacherName = teacherName;
     }
 
-    public void setStudentCourse(TbCourse course, TbStudentCourse studentCourse,String teacherName){
+    public Date getAddDate() {
+        return addDate;
+    }
+
+    public void setAddDate(Date addDate) {
+        this.addDate = addDate;
+    }
+
+    public void setStudentCourse(TbCourse course, TbStudentCourse studentCourse, String teacherName){
         this.id = studentCourse.getId();
         this.courseId = studentCourse.getCourseId();
         this.courseName = course.getCourseName();
         this.headcount = course.getHeadcount();
+        this.picUrl = course.getPicUrl();
         this.duration = course.getDuration();
         this.grade = studentCourse.getGrade();
         this.introduction = course.getIntroduction();
         this.teacherName = teacherName;
+        this.addDate = course.getAddDate();
     }
 }

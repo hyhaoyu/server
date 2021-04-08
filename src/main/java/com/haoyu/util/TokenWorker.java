@@ -22,7 +22,7 @@ public class TokenWorker {
     private static final JWTVerifier verifier = JWT.require(algorithm).build();
 
     //生成token
-    public static String generateToken (String id,String password){
+    public static String generateToken (String id,String password, Integer role){
 
         String token = "";
         //过期时间
@@ -35,7 +35,8 @@ public class TokenWorker {
         token = JWT.create()
                 .withHeader(header)
                 .withClaim("id",id)
-                .withClaim("password",password).withExpiresAt(date)
+                .withClaim("password",password)
+                .withClaim("role",role).withExpiresAt(date)
                 .sign(algorithm);
         return token;
 
@@ -62,5 +63,17 @@ public class TokenWorker {
             throw new RuntimeException("登录过期，请重新登录");
         }
         return jwt.getClaim("id").asString();
+    }
+
+    //获取token中的用户角色
+    public static Integer getRoleFromJWT(String token){
+        if(StringUtils.isBlank(token)){
+            throw new RuntimeException("请先登录");
+        }
+        DecodedJWT jwt = verifyToken(token);
+        if(System.currentTimeMillis() > jwt.getExpiresAt().getTime()){
+            throw new RuntimeException("登录过期，请重新登录");
+        }
+        return jwt.getClaim("role").asInt();
     }
 }

@@ -37,12 +37,12 @@ public class AdminServiceImpl implements AdminService {
         List<TbAdmin> adminList = adminMapper.selectByExample(example);
         //判断数据是否存在
         if(adminList != null && adminList.size() == 1){
-            //将用户密码加密密
+            //将用户密码加密
             String encodingPassword = DigestUtils.md5DigestAsHex(password.getBytes());
             if(encodingPassword.equals(adminList.get(0).getPassword())){
                 Admin _admin=new Admin();
                 BeanUtils.copyProperties(adminList.get(0),_admin);
-                _admin.setToken(TokenWorker.generateToken(_admin.getId(),password));
+                _admin.setToken(TokenWorker.generateToken(_admin.getId(), password, 0));
                 return _admin;
             }
         }
