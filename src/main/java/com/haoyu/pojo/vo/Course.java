@@ -1,8 +1,6 @@
 package com.haoyu.pojo.vo;
 
-import com.haoyu.pojo.TbCategory;
 import com.haoyu.pojo.TbCourse;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 

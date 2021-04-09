@@ -1,5 +1,6 @@
 package com.haoyu.service;
 
+import com.haoyu.pojo.vo.CourseDetail;
 import com.haoyu.pojo.vo.CourseGrade;
 import com.haoyu.pojo.vo.StudentCourseList;
 
@@ -27,4 +28,12 @@ public interface StudentCourseService {
      * @param token
      */
     void deleteStudentCourseById(String studentCourseId, String token);
+
+    /**
+     * 选课
+     * @param courseId
+     * @param token
+     * @return
+     */
+    void addStudentCourse(String courseId, String token);
 }

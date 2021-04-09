@@ -1,10 +1,8 @@
 package com.haoyu.service.impl;
 
-import com.haoyu.mapper.TbAdminMapper;
-import com.haoyu.mapper.TbCourseMapper;
-import com.haoyu.mapper.TbStudentCourseMapper;
-import com.haoyu.mapper.TbTeacherMapper;
+import com.haoyu.mapper.*;
 import com.haoyu.pojo.*;
+import com.haoyu.pojo.vo.CourseDetail;
 import com.haoyu.pojo.vo.CourseGrade;
 import com.haoyu.pojo.vo.StudentCourse;
 import com.haoyu.pojo.vo.StudentCourseList;
@@ -20,6 +18,8 @@ import java.util.List;
 @Service
 public class StudentCourseServiceImpl implements StudentCourseService {
 
+    @Autowired
+    private TbStudentMapper studentMapper;
     @Autowired
     private TbStudentCourseMapper studentCourseMapper;
     @Autowired
@@ -121,6 +121,32 @@ public class StudentCourseServiceImpl implements StudentCourseService {
         }
         studentCourseMapper.deleteByPrimaryKey(studentCourseId);
 
+        //更新课程人数
+        TbCourse course = courseMapper.selectByPrimaryKey(studentCourse.getCourseId());
+        course.setHeadcount(course.getHeadcount() -1);
+        courseMapper.updateByPrimaryKey(course);
+
+    }
+    @Override
+    public void addStudentCourse(String courseId, String token) {
+        //获取token中的id
+        String id = TokenWorker.getIdFromJWT(token);
+        if(studentMapper.selectByPrimaryKey(id) == null){
+            throw new RuntimeException("学员id错误");
+        }
+        TbCourse course = courseMapper.selectByPrimaryKey(courseId);
+        if(course == null){
+            throw new RuntimeException("课程id错误");
+        }
+        TbStudentCourse studentCourse = new TbStudentCourse();
+        studentCourse.setId(String.valueOf(idWorker.nextId()));
+        studentCourse.setUserId(id);
+        studentCourse.setCourseId(courseId);
+        studentCourseMapper.insert(studentCourse);
+
+        //更新课程人数
+        course.setHeadcount(course.getHeadcount() + 1);
+        courseMapper.updateByPrimaryKey(course);
     }
 
     //通过课程id查找课程

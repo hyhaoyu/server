@@ -1,6 +1,7 @@
 package com.haoyu.service;
 
 import com.haoyu.pojo.TbCourse;
+import com.haoyu.pojo.vo.CourseDetail;
 import com.haoyu.pojo.vo.CourseList;
 import com.haoyu.pojo.vo.Image;
 import org.springframework.web.multipart.MultipartFile;
@@ -46,4 +47,12 @@ public interface CourseService {
      * @return
      */
     Image updateCoursePicture(String courseId, MultipartFile imgFile, String token) throws IOException;
+
+    /**
+     * 查询课程详细信息
+     * @param courseId
+     * @param token
+     * @return
+     */
+    CourseDetail queryCourseById(String courseId, String token);
 }

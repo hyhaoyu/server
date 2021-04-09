@@ -2,11 +2,11 @@ package com.haoyu.service.impl;
 
 import com.haoyu.mapper.TbAdminMapper;
 import com.haoyu.mapper.TbCourseMapper;
+import com.haoyu.mapper.TbStudentCourseMapper;
 import com.haoyu.mapper.TbTeacherMapper;
-import com.haoyu.pojo.TbCourse;
-import com.haoyu.pojo.TbCourseExample;
-import com.haoyu.pojo.TbStudent;
+import com.haoyu.pojo.*;
 import com.haoyu.pojo.vo.Course;
+import com.haoyu.pojo.vo.CourseDetail;
 import com.haoyu.pojo.vo.CourseList;
 import com.haoyu.pojo.vo.Image;
 import com.haoyu.service.CourseService;
@@ -33,9 +33,11 @@ public class CourseServiceImpl implements CourseService {
     @Autowired
     private TbTeacherMapper teacherMapper;
     @Autowired
-    TbCourseMapper courseMapper;
+    private TbCourseMapper courseMapper;
     @Autowired
-    IdWorker idWorker;
+    private TbStudentCourseMapper studentCourseMapper;
+    @Autowired
+    private IdWorker idWorker;
 
     @Override
     public Image updateCoursePicture(String courseId, MultipartFile imgFile, String token) throws IOException {
@@ -118,6 +120,44 @@ public class CourseServiceImpl implements CourseService {
         tbCourse.setIntroduction(course.getIntroduction());
         courseMapper.updateByPrimaryKey(tbCourse);
 
+    }
+
+    @Override
+    public CourseDetail queryCourseById(String courseId, String token) {
+
+        //解密token
+        String studentId = TokenWorker.getIdFromJWT(token);
+
+        //根据用户名查询数据
+        TbCourse course = courseMapper.selectByPrimaryKey(courseId);
+        if(course == null){
+            return null;
+        }
+
+        //课程讲师姓名
+        String teacherName = null;
+        if(course.getTeacherId() != null){
+            teacherName = teacherMapper.selectByPrimaryKey(course.getTeacherId()).getRealName();
+        }
+
+        TbStudentCourseExample example = new TbStudentCourseExample();
+        TbStudentCourseExample.Criteria criteria = example.createCriteria();
+        criteria.andUserIdEqualTo(studentId);
+        criteria.andCourseIdEqualTo(courseId);
+        List<TbStudentCourse> studentCourseList = studentCourseMapper.selectByExample(example);
+
+        //学生课程成绩
+        Integer grade = null;
+        Boolean isTake = false;
+        String studentCourseId = null;
+        if(studentCourseList !=null && studentCourseList.size() != 0){
+            isTake = true;
+            studentCourseId = studentCourseList.get(0).getId();
+            if(studentCourseList.get(0).getGrade() != null){
+                grade = studentCourseList.get(0).getGrade();
+            }
+        }
+        return new CourseDetail(course, teacherName, isTake, grade, studentCourseId);
     }
 
     @Override

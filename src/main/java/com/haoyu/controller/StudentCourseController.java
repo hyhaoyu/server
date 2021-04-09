@@ -1,6 +1,7 @@
 package com.haoyu.controller;
 
-import com.haoyu.pojo.TbStudent;
+import com.haoyu.pojo.TbCourse;
+import com.haoyu.pojo.vo.CourseDetail;
 import com.haoyu.pojo.vo.CourseGrade;
 import com.haoyu.pojo.vo.Result;
 import com.haoyu.pojo.vo.StudentCourseList;
@@ -18,21 +19,19 @@ public class StudentCourseController {
 
     //查询学生课程信息
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public Result queryStudentCourse(@PathVariable("id")String userId,
-                                     @RequestParam(value = "pageNum",required = false)Integer pageNum,
-                                     @RequestParam(value = "pageSize",required = false)Integer pageSize,
-                                     @RequestHeader(value = "authorization",required = false)String token){
+    public Result queryStudentCourse(@PathVariable("id") String userId,
+                                     @RequestParam(value = "pageNum", required = false) Integer pageNum,
+                                     @RequestParam(value = "pageSize", required = false) Integer pageSize,
+                                     @RequestHeader(value = "authorization", required = false) String token) {
 
         try {
             StudentCourseList studentcourseList = studentCourseService.queryStudentCourse(userId, pageNum, pageSize, token);
-            if(studentcourseList == null){
-                return new Result(false,"课程查询为空");
+            if (studentcourseList == null) {
+                return new Result(false, "课程查询为空");
+            } else {
+                return new Result(true, "课程查询成功", studentcourseList);
             }
-            else{
-                return new Result(true,"课程查询成功", studentcourseList);
-            }
-        }
-        catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             e.printStackTrace();
             return new Result(false, e.getMessage());
         }
@@ -42,33 +41,46 @@ public class StudentCourseController {
     //修改
     @RequestMapping(value = "", method = RequestMethod.PUT)
     public Result updateCourseGrade(@RequestBody CourseGrade courseGrade,
-                                    @RequestHeader(value = "authorization",required = false)String token) {
+                                    @RequestHeader(value = "authorization", required = false) String token) {
 
         try {
             studentCourseService.updateCourseGrade(courseGrade, token);
-            return new Result(true,"课程成绩更新成功");
-        }
-        catch (RuntimeException e){
-            return new Result(false,e.getMessage());
-        }
-        catch (Exception e) {
+            return new Result(true, "课程成绩更新成功");
+        } catch (RuntimeException e) {
+            return new Result(false, e.getMessage());
+        } catch (Exception e) {
             e.printStackTrace();
-            return new Result(false,"课程成绩更新失败");
+            return new Result(false, "课程成绩更新失败");
         }
     }
 
     //退选课程
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public Result deleteStudent(@PathVariable("id")String studentCourseId,
-                                @RequestHeader(value = "authorization",required = false)String token){
+    public Result deleteStudentCourse(@PathVariable("id") String studentCourseId,
+                                      @RequestHeader(value = "authorization", required = false) String token) {
 
         try {
             studentCourseService.deleteStudentCourseById(studentCourseId, token);
-            return new Result(true,"退选成功");
+            return new Result(true, "退选成功");
         } catch (RuntimeException e) {
             e.printStackTrace();
-            return new Result(false,e.getMessage());
+            return new Result(false, e.getMessage());
         }
 
+    }
+
+    //选课
+    @RequestMapping(value = "", method = RequestMethod.POST)
+    public Result addStudentCourse(@RequestParam("id") String courseId,
+                                   @RequestHeader(value = "authorization", required = false) String token) {
+        try {
+            studentCourseService.addStudentCourse(courseId, token);
+            return new Result(true,"选课成功");
+        } catch (RuntimeException e){
+            return new Result(false, e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "选课错误错误");
+        }
     }
 }

@@ -163,9 +163,7 @@ public class TeacherServiceImpl implements TeacherService {
     public TeacherList queryTeacher(String name, Integer pageNum, Integer pageSize, String token) {
 
         //验证权限
-        if(adminMapper.selectByPrimaryKey(TokenWorker.getIdFromJWT(token)) ==null){
-            throw new RuntimeException("无查询权限，请以管理员身份登录");
-        }
+        TokenWorker.verifyToken(token);
 
         TbTeacherExample example = new TbTeacherExample();
         TbTeacherExample.Criteria criteria1 = example.createCriteria();

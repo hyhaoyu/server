@@ -1,6 +1,7 @@
 package com.haoyu.controller;
 
 import com.haoyu.pojo.TbCourse;
+import com.haoyu.pojo.vo.CourseDetail;
 import com.haoyu.pojo.vo.CourseList;
 import com.haoyu.pojo.vo.Image;
 import com.haoyu.pojo.vo.Result;
@@ -98,6 +99,26 @@ public class CourseController {
             }
             else{
                 return new Result(true,"课程查询成功", courseList);
+            }
+        }
+        catch (RuntimeException e) {
+            e.printStackTrace();
+            return new Result(false, e.getMessage());
+        }
+    }
+
+    //根据课程id查找课程
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    public Result queryCourseById(@PathVariable("id")String courseId,
+                                  @RequestHeader(value = "authorization",required = false)String token){
+
+        try {
+             CourseDetail courseDetail = courseService.queryCourseById(courseId, token);
+            if(courseDetail == null){
+                return new Result(false,"课程查询为空");
+            }
+            else{
+                return new Result(true,"课程查询成功", courseDetail);
             }
         }
         catch (RuntimeException e) {
