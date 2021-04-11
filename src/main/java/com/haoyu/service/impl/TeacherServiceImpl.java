@@ -8,6 +8,7 @@ import com.haoyu.pojo.TbTeacher;
 import com.haoyu.pojo.TbTeacherExample;
 import com.haoyu.pojo.vo.Image;
 import com.haoyu.pojo.vo.Teacher;
+import com.haoyu.pojo.vo.TeacherDetail;
 import com.haoyu.pojo.vo.TeacherList;
 import com.haoyu.service.TeacherService;
 import com.haoyu.util.IdWorker;
@@ -201,6 +202,23 @@ public class TeacherServiceImpl implements TeacherService {
             return new TeacherList(total, pageNum, teacherList);
         }
         return null;
+
+    }
+
+    @Override
+    public TeacherDetail queryTeacherById(String teacherId, String token) {
+
+        //验证权限
+        TokenWorker.verifyToken(token);
+        TbTeacher tbTeacher = teacherMapper.selectByPrimaryKey(teacherId);
+        if(tbTeacher != null){
+            TeacherDetail teacher = new TeacherDetail();
+            BeanUtils.copyProperties(tbTeacher, teacher);
+            return  teacher;
+        }
+        else{
+            throw new RuntimeException("无该讲师信息");
+        }
 
     }
 }

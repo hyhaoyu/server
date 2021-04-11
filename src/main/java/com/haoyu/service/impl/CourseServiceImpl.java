@@ -71,7 +71,8 @@ public class CourseServiceImpl implements CourseService {
         //获取token中的id
         String id = TokenWorker.getIdFromJWT(token);
         //验证权限
-        if(teacherMapper.selectByPrimaryKey(id) == null && adminMapper.selectByPrimaryKey(id) ==null){
+        TbTeacher teacher = teacherMapper.selectByPrimaryKey(id);
+        if(teacher == null && adminMapper.selectByPrimaryKey(id) ==null){
             throw new RuntimeException("无添加权限，请以管理员或者讲师身份登录");
         }
         if(course == null){
@@ -80,6 +81,7 @@ public class CourseServiceImpl implements CourseService {
         course.setId(String.valueOf(idWorker.nextId()));
         course.setHeadcount(0);
         course.setAddDate(new Date());
+        if(teacher != null) course.setTeacherId(id);
         courseMapper.insert(course);
         return courseMapper.selectByPrimaryKey(course.getId());
 

@@ -2,13 +2,12 @@ package com.haoyu.service.impl;
 
 import com.haoyu.mapper.*;
 import com.haoyu.pojo.*;
-import com.haoyu.pojo.vo.CourseDetail;
-import com.haoyu.pojo.vo.CourseGrade;
 import com.haoyu.pojo.vo.StudentCourse;
 import com.haoyu.pojo.vo.StudentCourseList;
 import com.haoyu.service.StudentCourseService;
 import com.haoyu.util.IdWorker;
 import com.haoyu.util.TokenWorker;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -82,11 +81,40 @@ public class StudentCourseServiceImpl implements StudentCourseService {
 
     }
 
+    //查找课程下学员信息
+    @Override
+    public List<TbStudentCourse> queryStudentCourseByCourseId(String courseId, String token) {
+
+        //验证token
+        TokenWorker.getRoleFromJWT(token);
+
+        TbStudentCourseExample example = new TbStudentCourseExample();
+        TbStudentCourseExample.Criteria criteria = example.createCriteria();
+        criteria.andCourseIdEqualTo(courseId);
+        List<TbStudentCourse> studentCourseList = studentCourseMapper.selectByExample(example);
+        if(studentCourseList != null && studentCourseList.size()>0){
+            return studentCourseList;
+        }
+        return null;
+    }
+
     //更新课程成绩
     @Override
-    public void updateCourseGrade(CourseGrade courseGrade, String token) {
+    public void updateCourseGrade(TbStudentCourse courseGrade, String token) {
 
-        TbStudentCourse studentCourse = studentCourseMapper.selectByPrimaryKey(courseGrade.getId());
+        TbStudentCourse studentCourse = null;
+        TbStudentCourseExample example = new TbStudentCourseExample();
+        TbStudentCourseExample.Criteria criteria = example.createCriteria();
+        if(StringUtils.isNotBlank(courseGrade.getId())){
+            studentCourse = studentCourseMapper.selectByPrimaryKey(courseGrade.getId());
+        }
+        else if(StringUtils.isNotBlank(courseGrade.getCourseId()) && StringUtils.isNotBlank(courseGrade.getUserId())){
+            criteria.andCourseIdEqualTo(courseGrade.getCourseId());
+            criteria.andUserIdEqualTo(courseGrade.getUserId());
+            List<TbStudentCourse> studentCourseList = studentCourseMapper.selectByExample(example);
+            if(studentCourseList != null) studentCourse = studentCourseList.get(0);
+        }
+
         if(studentCourse == null){
             throw new RuntimeException("无该学生的课程的课程成绩");
         }

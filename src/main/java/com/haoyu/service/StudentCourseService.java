@@ -1,8 +1,9 @@
 package com.haoyu.service;
 
-import com.haoyu.pojo.vo.CourseDetail;
-import com.haoyu.pojo.vo.CourseGrade;
+import com.haoyu.pojo.TbStudentCourse;
 import com.haoyu.pojo.vo.StudentCourseList;
+
+import java.util.List;
 
 public interface StudentCourseService {
     /**
@@ -20,7 +21,7 @@ public interface StudentCourseService {
      * @param courseGrade
      * @param token
      */
-    void updateCourseGrade(CourseGrade courseGrade, String token);
+    void updateCourseGrade(TbStudentCourse courseGrade, String token);
 
     /**
      * 删除学生课程
@@ -36,4 +37,12 @@ public interface StudentCourseService {
      * @return
      */
     void addStudentCourse(String courseId, String token);
+
+    /**
+     * 查找课程下学员信息
+     * @param courseId
+     * @param token
+     * @return
+     */
+    List<TbStudentCourse> queryStudentCourseByCourseId(String courseId, String token);
 }

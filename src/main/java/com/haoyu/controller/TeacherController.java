@@ -1,12 +1,8 @@
 package com.haoyu.controller;
 
 import com.haoyu.pojo.TbTeacher;
-import com.haoyu.pojo.vo.Image;
-import com.haoyu.pojo.vo.Result;
-import com.haoyu.pojo.vo.Teacher;
-import com.haoyu.pojo.vo.TeacherList;
+import com.haoyu.pojo.vo.*;
 import com.haoyu.service.TeacherService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -99,6 +95,23 @@ public class TeacherController {
             }
             else{
                 return new Result(true,"查询成功", teacherList);
+            }
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return new Result(false, e.getMessage());
+        }
+    }
+    //根据讲师id查找信息
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    public Result queryTeacherById(@PathVariable(value = "id")String teacherId,
+                                   @RequestHeader(value = "authorization",required = false)String token) {
+        try {
+            TeacherDetail teacher = teacherService.queryTeacherById(teacherId, token);
+            if(teacher == null){
+                return new Result(false,"查询为空");
+            }
+            else{
+                return new Result(true,"查询成功", teacher);
             }
         } catch (RuntimeException e) {
             e.printStackTrace();

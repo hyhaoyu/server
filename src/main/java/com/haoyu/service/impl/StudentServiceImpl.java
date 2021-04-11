@@ -1,7 +1,9 @@
 package com.haoyu.service.impl;
 
 import com.haoyu.mapper.TbAdminMapper;
+import com.haoyu.mapper.TbCourseMapper;
 import com.haoyu.mapper.TbStudentMapper;
+import com.haoyu.pojo.TbCourse;
 import com.haoyu.pojo.TbStudent;
 import com.haoyu.pojo.TbStudentExample;
 import com.haoyu.pojo.vo.Image;
@@ -30,6 +32,8 @@ public class StudentServiceImpl implements StudentService {
 
     @Autowired
     private TbStudentMapper studentMapper;
+    @Autowired
+    private TbCourseMapper courseMapper;
     @Autowired
     private TbAdminMapper adminMapper;
     @Autowired
@@ -161,8 +165,13 @@ public class StudentServiceImpl implements StudentService {
     public StudentList queryStudent(String name, String courseId, Integer pageNum, Integer pageSize, String token) {
 
         //验证权限
-        if(adminMapper.selectByPrimaryKey(TokenWorker.getIdFromJWT(token)) ==null){
-            throw new RuntimeException("无查询权限，请以管理员身份登录");
+        String id =  TokenWorker.getIdFromJWT(token);
+
+        if(adminMapper.selectByPrimaryKey(id) ==null){
+            TbCourse course = courseMapper.selectByPrimaryKey(courseId);
+            if(course == null || !id.equals(course.getTeacherId())){
+                throw new RuntimeException("无查询权限");
+            }
         }
 
         TbStudentExample example = new TbStudentExample();

@@ -1,13 +1,13 @@
 package com.haoyu.controller;
 
-import com.haoyu.pojo.TbCourse;
-import com.haoyu.pojo.vo.CourseDetail;
-import com.haoyu.pojo.vo.CourseGrade;
+import com.haoyu.pojo.TbStudentCourse;
 import com.haoyu.pojo.vo.Result;
 import com.haoyu.pojo.vo.StudentCourseList;
 import com.haoyu.service.StudentCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/studentCourse")
@@ -37,10 +37,28 @@ public class StudentCourseController {
         }
 
     }
+    //查询课程学员信息
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public Result queryStudentCourseByCourseId(@RequestParam(value = "courseId") String courseId,
+                                     @RequestHeader(value = "authorization", required = false) String token) {
+
+        try {
+            List<TbStudentCourse> studentCourseList = studentCourseService.queryStudentCourseByCourseId(courseId, token);
+            if (studentCourseList == null) {
+                return new Result(false, "课程查询为空");
+            } else {
+                return new Result(true, "课程查询成功", studentCourseList);
+            }
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return new Result(false, e.getMessage());
+        }
+
+    }
 
     //修改
     @RequestMapping(value = "", method = RequestMethod.PUT)
-    public Result updateCourseGrade(@RequestBody CourseGrade courseGrade,
+    public Result updateCourseGrade(@RequestBody TbStudentCourse courseGrade,
                                     @RequestHeader(value = "authorization", required = false) String token) {
 
         try {
