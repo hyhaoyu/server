@@ -217,4 +217,23 @@ public class StudentServiceImpl implements StudentService {
         }
         return null;
     }
+
+    @Override
+    public Student queryStudentById(String studentId, String token) {
+        //验证权限
+        String id = TokenWorker.getIdFromJWT(token);
+        if(!id.equals(studentId) && adminMapper.selectByPrimaryKey(id) ==null){
+            throw new RuntimeException("无查询权限，请以管理员或者用户本人身份登录");
+        }
+
+        TbStudent tbStudent = studentMapper.selectByPrimaryKey(studentId);
+        if(tbStudent != null){
+            Student student = new Student();
+            BeanUtils.copyProperties(tbStudent, student);
+            return  student;
+        }
+        else{
+            throw new RuntimeException("无该学员信息");
+        }
+    }
 }

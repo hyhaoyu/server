@@ -1,5 +1,6 @@
 package com.haoyu.controller;
 
+import com.haoyu.pojo.TbStudent;
 import com.haoyu.pojo.TbStudentCourse;
 import com.haoyu.pojo.vo.Result;
 import com.haoyu.pojo.vo.StudentCourseList;
@@ -89,10 +90,10 @@ public class StudentCourseController {
 
     //选课
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public Result addStudentCourse(@RequestParam("id") String courseId,
+    public Result addStudentCourse(@RequestBody TbStudentCourse studentCourse,
                                    @RequestHeader(value = "authorization", required = false) String token) {
         try {
-            studentCourseService.addStudentCourse(courseId, token);
+            studentCourseService.addStudentCourse(studentCourse, token);
             return new Result(true,"选课成功");
         } catch (RuntimeException e){
             return new Result(false, e.getMessage());

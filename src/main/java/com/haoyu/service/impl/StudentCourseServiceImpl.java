@@ -156,20 +156,21 @@ public class StudentCourseServiceImpl implements StudentCourseService {
 
     }
     @Override
-    public void addStudentCourse(String courseId, String token) {
+    public void addStudentCourse(TbStudentCourse studentCourse, String token) {
+
         //获取token中的id
         String id = TokenWorker.getIdFromJWT(token);
-        if(studentMapper.selectByPrimaryKey(id) == null){
-            throw new RuntimeException("学员id错误");
+
+        //验证权限
+        if(!id.equals(studentCourse.getUserId()) && adminMapper.selectByPrimaryKey(id) ==null){
+            throw new RuntimeException("无更新权限，请以管理员或者用户本人身份登录");
         }
-        TbCourse course = courseMapper.selectByPrimaryKey(courseId);
+        TbCourse course = courseMapper.selectByPrimaryKey(studentCourse.getCourseId());
         if(course == null){
             throw new RuntimeException("课程id错误");
         }
-        TbStudentCourse studentCourse = new TbStudentCourse();
         studentCourse.setId(String.valueOf(idWorker.nextId()));
-        studentCourse.setUserId(id);
-        studentCourse.setCourseId(courseId);
+        studentCourse.setGrade(null);
         studentCourseMapper.insert(studentCourse);
 
         //更新课程人数

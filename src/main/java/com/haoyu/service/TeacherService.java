@@ -3,7 +3,6 @@ package com.haoyu.service;
 import com.haoyu.pojo.TbTeacher;
 import com.haoyu.pojo.vo.Image;
 import com.haoyu.pojo.vo.Teacher;
-import com.haoyu.pojo.vo.TeacherDetail;
 import com.haoyu.pojo.vo.TeacherList;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -62,5 +61,5 @@ public interface TeacherService {
      * @param token
      * @return
      */
-    TeacherDetail queryTeacherById(String teacherId, String token);
+    Teacher queryTeacherById(String teacherId, String token);
 }

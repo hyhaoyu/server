@@ -1,14 +1,11 @@
 package com.haoyu.service.impl;
 
 import com.haoyu.mapper.TbAdminMapper;
-import com.haoyu.mapper.TbCourseMapper;
-import com.haoyu.mapper.TbStudentCourseMapper;
 import com.haoyu.mapper.TbTeacherMapper;
 import com.haoyu.pojo.TbTeacher;
 import com.haoyu.pojo.TbTeacherExample;
 import com.haoyu.pojo.vo.Image;
 import com.haoyu.pojo.vo.Teacher;
-import com.haoyu.pojo.vo.TeacherDetail;
 import com.haoyu.pojo.vo.TeacherList;
 import com.haoyu.service.TeacherService;
 import com.haoyu.util.IdWorker;
@@ -206,13 +203,13 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public TeacherDetail queryTeacherById(String teacherId, String token) {
+    public Teacher queryTeacherById(String teacherId, String token) {
 
         //验证权限
         TokenWorker.verifyToken(token);
         TbTeacher tbTeacher = teacherMapper.selectByPrimaryKey(teacherId);
         if(tbTeacher != null){
-            TeacherDetail teacher = new TeacherDetail();
+            Teacher teacher = new Teacher();
             BeanUtils.copyProperties(tbTeacher, teacher);
             return  teacher;
         }

@@ -67,9 +67,9 @@ public class CourseController {
         }
 
     }
-    //上传头像
+    //上传课程图片
     @RequestMapping(value = "picture", method = RequestMethod.POST)
-    public Result updateStudentAvatar(@RequestParam("id")String courseId,
+    public Result updateCoursePicture(@RequestParam("id")String courseId,
                                       @RequestParam("file") MultipartFile imgFile,
                                       @RequestHeader(value = "authorization",required = false)String token){
         try {

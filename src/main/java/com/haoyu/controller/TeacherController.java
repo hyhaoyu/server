@@ -106,7 +106,7 @@ public class TeacherController {
     public Result queryTeacherById(@PathVariable(value = "id")String teacherId,
                                    @RequestHeader(value = "authorization",required = false)String token) {
         try {
-            TeacherDetail teacher = teacherService.queryTeacherById(teacherId, token);
+            Teacher teacher = teacherService.queryTeacherById(teacherId, token);
             if(teacher == null){
                 return new Result(false,"查询为空");
             }

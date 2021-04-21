@@ -56,4 +56,12 @@ public interface StudentService {
      * @param token
      */
     Image updateStudentAvatar(String studentId, MultipartFile imgFile, String token) throws IOException;
+
+    /**
+     * 查看学员信息
+     * @param studentId
+     * @param token
+     * @return
+     */
+    Student queryStudentById(String studentId, String token);
 }

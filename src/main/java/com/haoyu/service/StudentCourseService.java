@@ -32,11 +32,11 @@ public interface StudentCourseService {
 
     /**
      * 选课
-     * @param courseId
+     * @param studentCourse
      * @param token
      * @return
      */
-    void addStudentCourse(String courseId, String token);
+    void addStudentCourse(TbStudentCourse studentCourse, String token);
 
     /**
      * 查找课程下学员信息

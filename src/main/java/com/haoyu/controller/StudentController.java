@@ -1,10 +1,7 @@
 package com.haoyu.controller;
 
 import com.haoyu.pojo.TbStudent;
-import com.haoyu.pojo.vo.Image;
-import com.haoyu.pojo.vo.Result;
-import com.haoyu.pojo.vo.Student;
-import com.haoyu.pojo.vo.StudentList;
+import com.haoyu.pojo.vo.*;
 import com.haoyu.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -102,6 +99,23 @@ public class StudentController {
             }
         }
         catch (RuntimeException e) {
+            e.printStackTrace();
+            return new Result(false, e.getMessage());
+        }
+    }
+    //根据学员id查找信息
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    public Result queryStudentById(@PathVariable(value = "id")String studentId,
+                                   @RequestHeader(value = "authorization",required = false)String token) {
+        try {
+            Student student = studentService.queryStudentById(studentId, token);
+            if(student == null){
+                return new Result(false,"查询为空");
+            }
+            else{
+                return new Result(true,"查询成功", student);
+            }
+        } catch (RuntimeException e) {
             e.printStackTrace();
             return new Result(false, e.getMessage());
         }
